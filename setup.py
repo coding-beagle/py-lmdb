@@ -161,7 +161,7 @@ with open('lmdb/_config.py', 'w') as fp:
 
 if use_cpython:
     print('py-lmdb: Using CPython extension; override with LMDB_FORCE_CFFI=1.')
-    install_requires = ['patch_ng>=16']
+    install_requires = ['patch_ng>=1.17']
     if memsink:
         extra_compile_args += ['-DHAVE_MEMSINK',
                                '-I' + os.path.dirname(memsink.__file__)]
@@ -175,7 +175,7 @@ if use_cpython:
     )]
 else:
     print('Using cffi extension.')
-    install_requires = ['cffi>=0.8', 'patch_ng>=16']
+    install_requires = ['cffi>=0.8', 'patch_ng>=1.17']
     try:
         import lmdb.cffi
         ext_modules = [lmdb.cffi._ffi.verifier.get_extension()]
