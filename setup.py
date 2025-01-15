@@ -89,6 +89,12 @@ else:
 if patch_lmdb_source:
     if sys.platform.startswith('win'):
         try:
+            try:
+                import pip
+                pip.main(['install', 'patch_ng'])
+            except AttributeError:
+                from pip._internal import main as pip_main
+                pip_main(['install', 'patch_ng'])
             import patch_ng as patch
         except ImportError:
             raise Exception('Building py-lmdb from source on Windows requires the "patch-ng" python module.')
@@ -161,7 +167,7 @@ with open('lmdb/_config.py', 'w') as fp:
 
 if use_cpython:
     print('py-lmdb: Using CPython extension; override with LMDB_FORCE_CFFI=1.')
-    install_requires = ['patch_ng>=1.17']
+    install_requires = []
     if memsink:
         extra_compile_args += ['-DHAVE_MEMSINK',
                                '-I' + os.path.dirname(memsink.__file__)]
@@ -175,7 +181,7 @@ if use_cpython:
     )]
 else:
     print('Using cffi extension.')
-    install_requires = ['cffi>=0.8', 'patch_ng>=1.17']
+    install_requires = ['cffi>=0.8']
     try:
         import lmdb.cffi
         ext_modules = [lmdb.cffi._ffi.verifier.get_extension()]
@@ -190,6 +196,7 @@ def grep_version():
             if line.startswith('__version__'):
                 return eval(line.split()[-1])
 
+install_requires.append('patch_ng>=1.16')
 setup(
     name='lmdb',
     version=grep_version(),
