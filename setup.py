@@ -196,7 +196,7 @@ def grep_version():
             if line.startswith('__version__'):
                 return eval(line.split()[-1])
 
-install_requires.append('patch_ng>=1.16')
+install_requires.append('patch-ng>=1.16')
 setup(
     name='lmdb',
     version=grep_version(),
